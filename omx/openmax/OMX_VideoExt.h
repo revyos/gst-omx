@@ -59,7 +59,131 @@ typedef struct OMX_NALSTREAMFORMATTYPE{
     OMX_NALUFORMATSTYPE eNaluFormat;
 } OMX_NALSTREAMFORMATTYPE;
 
+/** VP8 profiles */
+typedef enum OMX_VIDEO_VP8PROFILETYPE {
+    OMX_VIDEO_VP8ProfileMain = 0x01,
+    OMX_VIDEO_VP8ProfileUnknown = 0x6EFFFFFF,
+    OMX_VIDEO_VP8ProfileMax = 0x7FFFFFFF
+} OMX_VIDEO_VP8PROFILETYPE;
 
+/** VP8 levels */
+typedef enum OMX_VIDEO_VP8LEVELTYPE {
+    OMX_VIDEO_VP8Level_Version0 = 0x01,
+    OMX_VIDEO_VP8Level_Version1 = 0x02,
+    OMX_VIDEO_VP8Level_Version2 = 0x04,
+    OMX_VIDEO_VP8Level_Version3 = 0x08,
+    OMX_VIDEO_VP8LevelUnknown = 0x6EFFFFFF,
+    OMX_VIDEO_VP8LevelMax = 0x7FFFFFFF
+} OMX_VIDEO_VP8LEVELTYPE;
+
+/** VP8 Param */
+typedef struct OMX_VIDEO_PARAM_VP8TYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nPortIndex;
+    OMX_VIDEO_VP8PROFILETYPE eProfile;
+    OMX_VIDEO_VP8LEVELTYPE eLevel;
+    OMX_U32 nDCTPartitions;
+    OMX_BOOL bErrorResilientMode;
+} OMX_VIDEO_PARAM_VP8TYPE;
+
+/** Structure for configuring VP8 reference frames */
+typedef struct OMX_VIDEO_VP8REFERENCEFRAMETYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nPortIndex;
+    OMX_BOOL bPreviousFrameRefresh;
+    OMX_BOOL bGoldenFrameRefresh;
+    OMX_BOOL bAlternateFrameRefresh;
+    OMX_BOOL bUsePreviousFrame;
+    OMX_BOOL bUseGoldenFrame;
+    OMX_BOOL bUseAlternateFrame;
+} OMX_VIDEO_VP8REFERENCEFRAMETYPE;
+
+/** Structure for querying VP8 reference frame type */
+typedef struct OMX_VIDEO_VP8REFERENCEFRAMEINFOTYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nPortIndex;
+    OMX_BOOL bIsIntraFrame;
+    OMX_BOOL bIsGoldenOrAlternateFrame;
+} OMX_VIDEO_VP8REFERENCEFRAMEINFOTYPE;
+
+/** HEVC Profiles */
+typedef enum OMX_VIDEO_HEVCPROFILETYPE {
+    OMX_VIDEO_HEVCProfileMain    = 0x01,
+    OMX_VIDEO_HEVCProfileMain10  = 0x02,
+    OMX_VIDEO_HEVCProfileUnknown = 0x6EFFFFFF,
+    OMX_VIDEO_HEVCProfileMax      = 0x7FFFFFFF
+} OMX_VIDEO_HEVCPROFILETYPE;
+
+/** HEVC levels */
+typedef enum OMX_VIDEO_HEVCLEVELTYPE {
+    OMX_VIDEO_HEVCMainTierLevel1   = 0x01,
+    OMX_VIDEO_HEVCMainTierLevel2   = 0x02,
+    OMX_VIDEO_HEVCMainTierLevel21  = 0x04,
+    OMX_VIDEO_HEVCMainTierLevel3   = 0x08,
+    OMX_VIDEO_HEVCMainTierLevel31  = 0x10,
+    OMX_VIDEO_HEVCMainTierLevel4   = 0x20,
+    OMX_VIDEO_HEVCMainTierLevel41  = 0x40,
+    OMX_VIDEO_HEVCMainTierLevel5   = 0x80,
+    OMX_VIDEO_HEVCMainTierLevel51  = 0x100,
+    OMX_VIDEO_HEVCMainTierLevel52  = 0x200,
+    OMX_VIDEO_HEVCMainTierLevel6   = 0x400,
+    OMX_VIDEO_HEVCMainTierLevel61  = 0x800,
+    OMX_VIDEO_HEVCMainTierLevel62  = 0x1000,
+    OMX_VIDEO_HEVCHighTierLevel1   = 0x2000,
+    OMX_VIDEO_HEVCHighTierLevel2   = 0x4000,
+    OMX_VIDEO_HEVCHighTierLevel21  = 0x8000,
+    OMX_VIDEO_HEVCHighTierLevel3   = 0x10000,
+    OMX_VIDEO_HEVCHighTierLevel31  = 0x20000,
+    OMX_VIDEO_HEVCHighTierLevel4   = 0x40000,
+    OMX_VIDEO_HEVCHighTierLevel41  = 0x80000,
+    OMX_VIDEO_HEVCHighTierLevel5   = 0x100000,
+    OMX_VIDEO_HEVCHighTierLevel51  = 0x200000,
+    OMX_VIDEO_HEVCHighTierLevel52  = 0x400000,
+    OMX_VIDEO_HEVCHighTierLevel6   = 0x800000,
+    OMX_VIDEO_HEVCHighTierLevel61  = 0x1000000,
+    OMX_VIDEO_HEVCHighTierLevel62  = 0x2000000,
+    OMX_VIDEO_HEVCLevelUnknown = 0x6EFFFFFF,
+    OMX_VIDEO_HEVCLevelMax = 0x7FFFFFFF
+} OMX_VIDEO_HEVCLEVELTYPE;
+
+/** HEVC Param */
+typedef struct OMX_VIDEO_PARAM_HEVCTYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nPortIndex;
+    OMX_VIDEO_HEVCPROFILETYPE eProfile;
+    OMX_VIDEO_HEVCLEVELTYPE eLevel;
+    OMX_U32 nKeyFrameInterval; /* 0 => undefined. Codec-default */
+    OMX_U8 unused[848];
+} OMX_VIDEO_PARAM_HEVCTYPE;
+
+/**
+ * Structure for configuring video compression intra refresh period
+ *
+ * STRUCT MEMBERS:
+ *  nSize               : Size of the structure in bytes
+ *  nVersion            : OMX specification version information
+ *  nPortIndex          : Port that this structure applies to
+ *  nRefreshPeriod      : Intra refreh period in frames. Value 0 means disable intra refresh
+*/
+typedef struct OMX_VIDEO_CONFIG_ANDROID_INTRAREFRESHTYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nPortIndex;
+    OMX_U32 nRefreshPeriod;
+} OMX_VIDEO_CONFIG_ANDROID_INTRAREFRESHTYPE;
+
+typedef enum OMX_VIDEO_CODINGTYPET {
+    OMX_VIDEO_CodingHEVC = OMX_VIDEO_CodingVendorStartUnused + 0x00100006,
+    OMX_VIDEO_CodingVP9,
+} OMX_VIDEO_CODINGTYPET;
+ 
+typedef enum OMX_INDEXTYPET {
+    OMX_IndexParamVideoHevc = OMX_IndexVendorStartUnused + 0x00100007
+} OMX_INDEXTYPET;
 
 #ifdef __cplusplus
 }

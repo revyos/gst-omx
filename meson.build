@@ -309,15 +309,10 @@ if have_omx_theora
   cdata.set('HAVE_THEORA', 1)
 endif
 
-have_omx_hevc = cc.has_header_symbol(
-    'OMX_Video.h',
-    'OMX_VIDEO_CodingHEVC',
-    prefix : extra_video_headers,
-    args : gst_omx_args,
-    include_directories : [omx_inc])
-if have_omx_hevc
-  cdata.set('HAVE_HEVC', 1)
-endif
+
+cdata.set('HAVE_HEVC', 1)
+
+cdata.set('HAVE_VP9', 1)
 
 if gstgl_dep.found()
   cdata.set ('HAVE_GST_GL', 1)

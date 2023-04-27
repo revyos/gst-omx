@@ -37,11 +37,11 @@ if have_omx_theora
   omx_sources += 'gstomxtheoradec.c'
 endif
 
-if have_omx_hevc
-  omx_sources += 'gstomxh265utils.c'
-  omx_sources += 'gstomxh265enc.c'
-  omx_sources += 'gstomxh265dec.c'
-endif
+omx_sources += 'gstomxh265utils.c'
+omx_sources += 'gstomxh265enc.c'
+omx_sources += 'gstomxh265dec.c'
+
+omx_sources += 'gstomxvp9dec.c'
 
 optional_deps = []
 if gstgl_dep.found()
