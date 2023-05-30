@@ -3452,8 +3452,28 @@ gst_omx_port_set_dmabuf (GstOMXPort * port, gboolean dmabuf)
 
   return TRUE;
 #else
-  /* dmabuf not supported for this platform */
-  return FALSE;
+  OMX_CSI_BUFFER_MODE_CONFIGTYPE buffer_mode;
+  OMX_ERRORTYPE err;
+
+  GST_OMX_INIT_STRUCT (&buffer_mode);
+  buffer_mode.nPortIndex = port->index;
+
+  if (dmabuf)
+    buffer_mode.eMode = OMX_CSI_BUFFER_MODE_DMA;
+  else
+    buffer_mode.eMode = OMX_CSI_BUFFER_MODE_NORMAL;
+
+  err =
+      gst_omx_component_set_parameter (port->comp,
+      (OMX_INDEXTYPE) OMX_CSI_IndexParamBufferMode, &buffer_mode);
+  if (err != OMX_ErrorNone) {
+    GST_WARNING_OBJECT (port->comp->parent,
+        "Failed to set port %d in %sdmabuf mode: %s (0x%08x)",
+        port->index, dmabuf ? "" : "non-", gst_omx_error_to_string (err), err);
+    return FALSE;
+  }
+
+  return TRUE;
 #endif
 }
 

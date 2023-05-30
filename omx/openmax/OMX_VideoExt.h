@@ -39,6 +39,7 @@ extern "C" {
  * for this header file to compile successfully
  */
 #include <OMX_Core.h>
+#include <omxil/OMX_CsiExt.h>
 
 /** NALU Formats */
 typedef enum OMX_NALUFORMATSTYPE {
