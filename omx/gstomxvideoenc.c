@@ -2289,6 +2289,12 @@ gst_omx_video_enc_enable (GstOMXVideoEnc * self, GstBuffer * input)
 #endif
   }
 
+  if (gst_is_dmabuf_memory (gst_buffer_peek_memory (input, 0))) {
+    GST_DEBUG_OBJECT (self, "Configure encoder input to import dmabuf");
+    gst_omx_port_set_dmabuf (self->enc_in_port, TRUE);
+    self->input_dmabuf = TRUE;
+  }
+
   GST_DEBUG_OBJECT (self, "Enabling component");
 
   if (!self->in_pool_used) {
@@ -2822,6 +2828,20 @@ gst_omx_video_enc_fill_buffer (GstOMXVideoEnc * self, GstBuffer * inbuf,
           gst_buffer_get_size (inbuf));
     }
 
+    ret = TRUE;
+    goto done;
+  }
+
+  if (self->input_dmabuf) {
+    /* dmabuf input */
+    if (!gst_omx_buffer_import_fd (outbuf, inbuf)) {
+      GST_ELEMENT_ERROR (self, STREAM, FORMAT, (NULL),
+          ("failed to import dmabuf"));
+      return FALSE;
+    }
+
+    GST_LOG_OBJECT (self, "Import dmabuf of %" G_GSIZE_FORMAT " bytes",
+        gst_buffer_get_size (inbuf));
     ret = TRUE;
     goto done;
   }
