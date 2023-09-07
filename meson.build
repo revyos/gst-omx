@@ -314,6 +314,8 @@ cdata.set('HAVE_HEVC', 1)
 
 cdata.set('HAVE_VP9', 1)
 
+cdata.set('HAVE_MJPEG_ENC', 1)
+
 if gstgl_dep.found()
   cdata.set ('HAVE_GST_GL', 1)
 endif

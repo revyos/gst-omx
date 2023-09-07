@@ -42,6 +42,7 @@ omx_sources += 'gstomxh265enc.c'
 omx_sources += 'gstomxh265dec.c'
 
 omx_sources += 'gstomxvp9dec.c'
+omx_sources += 'gstomxmjpegenc.c'
 
 optional_deps = []
 if gstgl_dep.found()

@@ -50,6 +50,7 @@
 #include "gstomxanalogaudiosink.h"
 #include "gstomxhdmiaudiosink.h"
 #include "gstomxvp9dec.h"
+#include "gstomxmjpegenc.h"
 
 GST_DEBUG_CATEGORY (gstomx_debug);
 #define GST_CAT_DEFAULT gstomx_debug
@@ -3556,6 +3557,9 @@ static const GGetTypeFunction types[] = {
 #endif
 #ifdef HAVE_VP9
       , gst_omx_vp9_dec_get_type
+#endif
+#ifdef HAVE_MJPEG_ENC
+      , gst_omx_mjpeg_enc_get_type
 #endif
 };
 
