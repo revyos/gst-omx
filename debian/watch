@@ -1,0 +1,6 @@
+# Compulsory line, this is a version 4 file
+version=4
+
+# HTTP site (basic)
+https://gstreamer.freedesktop.org/src/gst-omx/ \
+  gst-omx-([\d\.]+)\.tar\.xz debian uupdate

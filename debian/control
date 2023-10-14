@@ -1,0 +1,52 @@
+Source: gst-omx
+Priority: optional
+Maintainer: Ying-Chun Liu (PaulLiu) <paulliu@debian.org>
+Build-Depends: debhelper-compat (= 13),
+               dh-exec,
+               docbook-xml,
+               docbook-xsl,
+               libglib2.0-dev (>= 2.44.0),
+               libgstreamer-plugins-base1.0-dev (>= 1.18),
+               libgstreamer1.0-dev (>= 1.18),
+               meson (>= 0.47),
+               rename,
+               xsltproc
+Standards-Version: 4.5.0
+Section: libs
+Homepage: https://gstreamer.freedesktop.org/modules/gst-omx.html
+
+Package: gstreamer1.0-omx-generic
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: OpenMax plugins for GStreamer
+ This plugin wraps available OpenMAX IL components and makes them available as
+ standard GStreamer elements.
+
+Package: gst-omx-listcomponents
+Architecture: any
+Section: utils
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: OpenMax plugins for GStreamer
+ This package contains listcomponents for listing components in openmax IL.
+ listcomponents is a debugging tool and should be only used for developers.
+
+Package: gstreamer1.0-omx-generic-config
+Architecture: any
+Section: misc
+Depends: gstreamer1.0-omx-generic, ${misc:Depends}, ${shlibs:Depends}
+Description: OpenMax plugins for GStreamer
+ This plugin wraps available OpenMAX IL components and makes them available as
+ standard GStreamer elements.
+ .
+ This package contains the config for gstreamer1.0-omx-generic.
+
+Package: gstreamer1.0-omx-bellagio-config
+Architecture: any
+Section: misc
+Depends: gstreamer1.0-omx-generic, ${misc:Depends}, ${shlibs:Depends}
+Description: OpenMax plugins for GStreamer
+ This plugin wraps available OpenMAX IL components and makes them available as
+ standard GStreamer elements.
+ .
+ This package is specific for using Bellagio OpenMAX IL. This package contains
+ the config for gstreamer1.0-omx-generic.

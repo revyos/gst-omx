@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+DEB_BUILD_MULTIARCH=`dpkg-architecture -qDEB_BUILD_MULTIARCH`
+
+if [ -e /usr/lib/"$DEB_BUILD_MULTIARCH"/libomxil-bellagio.so.0 ]; then
+    echo "Test for multi-arch"
+    gst-omx-listcomponents \
+	/usr/lib/"$DEB_BUILD_MULTIARCH"/libomxil-bellagio.so.0
+elif [ -e /usr/lib/libomxil-bellagio.so.0 ]; then
+    echo "Test for non-multiarch"
+    gst-omx-listcomponents \
+	/usr/lib/libomxil-bellagio.so.0
+else
+    echo "Did not found libomxil-bellagio.so.0"
+    exit 1
+fi
+
+    
+    

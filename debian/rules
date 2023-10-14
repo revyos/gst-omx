@@ -1,0 +1,84 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- -Dtarget=generic
+
+override_dh_auto_build: gst-omx-listcomponents.1
+	dh_auto_configure --builddir=obj-$(DEB_HOST_GNU_TYPE)-bellagio -- -Dtarget=bellagio
+	dh_auto_build --builddir=obj-$(DEB_HOST_GNU_TYPE)-bellagio
+	dh_auto_test --builddir=obj-$(DEB_HOST_GNU_TYPE)-bellagio
+	fakeroot dh_auto_install --builddir=obj-$(DEB_HOST_GNU_TYPE)-bellagio --destdir=$(CURDIR)/debian/tmp-bellagio
+	find $(CURDIR)/debian/tmp-bellagio/usr/lib -name '*.so' -exec rename s/\\.so$$/-bellagio\\.so/ {} \;
+	find $(CURDIR)/debian/tmp-bellagio/usr/lib -name '*.la' -exec rename s/\\.la$$/-bellagio\\.la/ {} \;
+	find $(CURDIR)/debian/tmp-bellagio/etc/xdg -name '*.conf' -exec rename s/\\.conf$$/-bellagio\\.conf/ {} \;
+	sed -i 's#/usr.*/lib/libomxil-bellagio[.]so[.]0#/usr/lib/$(DEB_HOST_MULTIARCH)/libomxil-bellagio.so.0#g' $(CURDIR)/debian/tmp-bellagio/etc/xdg/gstomx-bellagio.conf
+	dh_auto_clean --builddir=obj-$(DEB_HOST_GNU_TYPE)-bellagio
+	dh_auto_clean
+
+	#dh_auto_configure --builddir=obj-$(DEB_HOST_GNU_TYPE)-rpi -- -Dtarget=rpi
+	#dh_auto_build --builddir=obj-$(DEB_HOST_GNU_TYPE)-rpi
+	#dh_auto_install --builddir=obj-$(DEB_HOST_GNU_TYPE)-rpi --destdir=$(CURDIR)/debian/tmp-rpi
+	#dh_auto_clean --builddir=obj-$(DEB_HOST_GNU_TYPE)-rpi
+	#dh_auto_clean
+
+	#dh_auto_configure --builddir=obj-$(DEB_HOST_GNU_TYPE)-tizonia -- -Dtarget=tizonia
+	#dh_auto_build --builddir=obj-$(DEB_HOST_GNU_TYPE)-tizonia
+	#dh_auto_install --builddir=obj-$(DEB_HOST_GNU_TYPE)-tizonia --destdir=$(CURDIR)/debian/tmp-tizonia
+	#dh_auto_clean --builddir=obj-$(DEB_HOST_GNU_TYPE)-tizonia
+	#dh_auto_clean
+
+	#dh_auto_configure --builddir=obj-$(DEB_HOST_GNU_TYPE)-zynqultrascaleplus -- -Dtarget=zynqultrascaleplus
+	#dh_auto_build --builddir=obj-$(DEB_HOST_GNU_TYPE)-zynqultrascaleplus
+	#dh_auto_install --builddir=obj-$(DEB_HOST_GNU_TYPE)-zynqultrascaleplus --destdir=$(CURDIR)/debian/tmp-zynqultrascaleplus
+	#dh_auto_clean --builddir=obj-$(DEB_HOST_GNU_TYPE)-zynqultrascaleplus
+	#dh_auto_clean
+
+	dh_auto_configure -- -Dtarget=generic
+	dh_auto_build
+
+override_dh_auto_install:
+	dh_auto_install
+	find $(CURDIR)/debian/tmp/usr/lib -name '*.so' -exec rename s/\\.so$$/-generic\\.so/ {} \;
+	find $(CURDIR)/debian/tmp/usr/lib -name '*.la' -exec rename s/\\.la$$/-generic\\.la/ {} \;
+	mkdir -p $(CURDIR)/debian/tmp/etc/xdg
+	cp -n -R $(CURDIR)/debian/tmp-bellagio/* $(CURDIR)/debian/tmp
+	# While we don't build gstreamer1.0-omx-bellagio
+	rm $(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstomx-bellagio.so
+
+override_dh_auto_clean:
+	rm -rf $(CURDIR)/debian/tmp-bellagio
+	rm -rf $(CURDIR)/debian/tmp-rpi
+	rm -rf $(CURDIR)/debian/tmp-tizonia
+	rm -rf $(CURDIR)/debian/tmp-zynqultrascaleplus
+	dh_auto_clean --builddir=obj-$(DEB_HOST_GNU_TYPE)-bellagio
+	dh_auto_clean --builddir=obj-$(DEB_HOST_GNU_TYPE)-rpi
+	dh_auto_clean --builddir=obj-$(DEB_HOST_GNU_TYPE)-tizonia
+	dh_auto_clean --builddir=obj-$(DEB_HOST_GNU_TYPE)-zynqultrascaleplus
+	dh_auto_clean
+	rm -f $(MULTIARCH_INSTALL)
+
+MULTIARCH_INSTALL = debian/gstreamer1.0-omx-generic.postinst \
+		    debian/gstreamer1.0-omx-generic.prerm \
+		    debian/gstreamer1.0-omx-bellagio.postinst \
+		    debian/gstreamer1.0-omx-bellagio.prerm
+
+$(MULTIARCH_INSTALL): % : %.in
+	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' $< > $@
+
+override_dh_install: $(MULTIARCH_INSTALL)
+	dh_install
+
+DB2MAN = /usr/share/sgml/docbook/stylesheet/xsl/docbook-xsl/manpages/docbook.xsl
+XP     = xsltproc -''-nonet -''-param man.charmap.use.subset "0"
+
+gst-omx-listcomponents.1: debian/gst-omx-listcomponents.1.xml
+	$(XP) $(DB2MAN) $<

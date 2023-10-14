@@ -1,0 +1,15 @@
+config.log
+tools/gst-omx-listcomponents
+gst-omx-listcomponents.1
+examples/egl/testegl
+examples/egl/*.o
+Makefile
+_stdint.h
+config.h
+config.status
+examples/Makefile
+examples/egl/Makefile
+libtool
+stamp-h1
+tests/Makefile
+tests/check/Makefile

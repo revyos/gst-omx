@@ -1,0 +1,12 @@
+Tests: gstinspect
+Depends: gstreamer1.0-omx-bellagio-config,
+         gstreamer1.0-omx-generic,
+         gstreamer1.0-omx-generic-config,
+         gstreamer1.0-tools,
+         libomxil-bellagio0-components-base (>= 0.9.3-6)
+
+Tests: listcomponents-bellagio
+Depends: gst-omx-listcomponents,
+         gstreamer1.0-omx-bellagio-config,
+         gstreamer1.0-omx-generic,
+         libomxil-bellagio0-components-base

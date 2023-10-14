@@ -1,0 +1,157 @@
+gst-omx (1.22.0-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Mon, 30 Jan 2023 23:47:56 +0800
+
+gst-omx (1.20.5-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Tue, 10 Jan 2023 04:45:04 +0800
+
+gst-omx (1.20.4-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Wed, 23 Nov 2022 12:54:38 +0800
+
+gst-omx (1.20.3-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Sat, 25 Jun 2022 09:42:25 +0800
+
+gst-omx (1.20.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Sat, 07 May 2022 00:34:21 +0800
+
+gst-omx (1.20.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Wed, 23 Mar 2022 22:25:03 +0800
+
+gst-omx (1.18.5-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Mon, 17 Jan 2022 15:19:59 +0800
+
+gst-omx (1.18.3-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Sat, 23 Jan 2021 03:23:43 +0800
+
+gst-omx (1.18.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Fri, 11 Dec 2020 00:35:56 +0800
+
+gst-omx (1.18.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Thu, 12 Nov 2020 08:15:58 +0800
+
+gst-omx (1.18.0-2) unstable; urgency=low
+
+  * debian/gst-omx-listcomponents.install and debian/rules:
+    Use ${DEB_HOST_GNU_TYPE} instead of ${DEB_HOST_MULTIARCH} to fix FTBFS
+    on i386.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Wed, 23 Sep 2020 14:03:37 +0800
+
+gst-omx (1.18.0-1) unstable; urgency=low
+
+  [ Iain Lane <iain@orangesquash.org.uk> ]
+  * New upstream release compatible with 1.18. (Closes: #970716)
+  * Convert to meson, following upstream..
+  * debian/patches/0002-remove-distclean-local-orc-target.patch: Drop, this
+    was a patch for autotools and is not required any more.
+  * Use compat 13, so we can use substvars in .install files, so that ...
+  * debian/gst-omx-listcomponents.install: Install from the new build
+    directory under ${DEB_HOST_MULTIARCH}. Use dh-exec to be able to rename
+    the file from listcomponents (upstream's name) to gst-omx-listcomponents.
+  * debian/rules: Explicitly stop installing libgstomx-bellagio.so while we're
+    not building gstreamer1.0-omx-bellagio, so that dh_missing --fail-missing
+    passes.
+
+  [ Ying-Chun Liu (PaulLiu) <paulliu@debian.org> ]
+  * Bump Standards-Version to 4.5.0: nothing needs to be changed.
+  * Thanks for Iain's work.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Wed, 23 Sep 2020 03:39:54 +0800
+
+gst-omx (1.16.2-4) unstable; urgency=low
+
+  * autopkgtest: Add version depends on latest libomxil-bellagio
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Tue, 01 Sep 2020 06:03:34 +0800
+
+gst-omx (1.16.2-3) unstable; urgency=low
+
+  * Fix autopkgtest: also test on old lib path
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Mon, 31 Aug 2020 06:23:34 +0800
+
+gst-omx (1.16.2-2) unstable; urgency=low
+
+  * Fix autopkgtest: libomxil-bellagio changed to Multi-Arch
+  * Support Multi-Arch in /etc/xdg/gstomx-bellagio.conf
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Wed, 12 Aug 2020 14:13:50 +0800
+
+gst-omx (1.16.2-1) unstable; urgency=low
+
+  * New upstream release
+  * Bump debhelper version to 11
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Wed, 11 Dec 2019 04:16:19 +0800
+
+gst-omx (1.16.1-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Sun, 10 Nov 2019 02:24:26 +0800
+
+gst-omx (1.14.4-1) unstable; urgency=low
+
+  * New upstream release
+  * Bump debhelper version to 10
+    - start using dh_autoreconf
+  * Bump Standards-Version to 4.2.1: nothing needs to be changed.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Thu, 08 Nov 2018 08:13:35 +0800
+
+gst-omx (1.12.4-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/rules: fix debhelper-tools-from-autotools-dev-are-deprecated
+  * Bump Standards-Version to 4.1.2: nothing needs to be changed.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Thu, 14 Dec 2017 01:07:38 +0800
+
+gst-omx (1.12.3-2) unstable; urgency=low
+
+  * Fix autopkgtest dependencies
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Fri, 03 Nov 2017 17:40:44 +0800
+
+gst-omx (1.12.3-1) unstable; urgency=low
+
+  * New upstream release
+  * listcomponents-bellagio: remove Priority: extra
+  * Bump Standards-Version to 4.1.1: nothing needs to be changed.
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Tue, 31 Oct 2017 18:37:09 +0800
+
+gst-omx (1.10.4-1) unstable; urgency=low
+
+  * Initial release (Closes: #858015)
+
+ -- Ying-Chun Liu (PaulLiu) <paulliu@debian.org>  Fri, 17 Mar 2017 18:43:28 +0800
