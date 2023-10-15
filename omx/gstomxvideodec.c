@@ -88,6 +88,9 @@ enum
 {
   PROP_0,
   PROP_INTERNAL_ENTROPY_BUFFERS,
+
+  PROP_OUTPUT_WIDTH,
+  PROP_OUTPUT_HEIGHT,
 };
 
 #define GST_OMX_VIDEO_DEC_INTERNAL_ENTROPY_BUFFERS_DEFAULT (5)
@@ -106,9 +109,7 @@ static void
 gst_omx_video_dec_set_property (GObject * object, guint prop_id,
     const GValue * value, GParamSpec * pspec)
 {
-#ifdef USE_OMX_TARGET_ZYNQ_USCALE_PLUS
   GstOMXVideoDec *self = GST_OMX_VIDEO_DEC (object);
-#endif
 
   switch (prop_id) {
 #ifdef USE_OMX_TARGET_ZYNQ_USCALE_PLUS
@@ -116,6 +117,12 @@ gst_omx_video_dec_set_property (GObject * object, guint prop_id,
       self->internal_entropy_buffers = g_value_get_uint (value);
       break;
 #endif
+    case PROP_OUTPUT_WIDTH:
+      self->output_width = g_value_get_uint (value);
+      break;
+    case PROP_OUTPUT_HEIGHT:
+      self->output_height = g_value_get_uint (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -126,9 +133,7 @@ static void
 gst_omx_video_dec_get_property (GObject * object, guint prop_id,
     GValue * value, GParamSpec * pspec)
 {
-#ifdef USE_OMX_TARGET_ZYNQ_USCALE_PLUS
   GstOMXVideoDec *self = GST_OMX_VIDEO_DEC (object);
-#endif
 
   switch (prop_id) {
 #ifdef USE_OMX_TARGET_ZYNQ_USCALE_PLUS
@@ -136,6 +141,12 @@ gst_omx_video_dec_get_property (GObject * object, guint prop_id,
       g_value_set_uint (value, self->internal_entropy_buffers);
       break;
 #endif
+    case PROP_OUTPUT_WIDTH:
+      g_value_set_uint (value, self->output_width);
+      break;
+    case PROP_OUTPUT_HEIGHT:
+      g_value_set_uint (value, self->output_height);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -163,6 +174,17 @@ gst_omx_video_dec_class_init (GstOMXVideoDecClass * klass)
           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
           GST_PARAM_MUTABLE_READY));
 #endif
+  g_object_class_install_property (gobject_class, PROP_OUTPUT_WIDTH,
+      g_param_spec_uint ("output-width", "output width",
+          "video frame output width, which scaled by video decoder. 0 means default source width",
+          0, G_MAXUINT32, 0,
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | GST_PARAM_MUTABLE_READY));
+
+  g_object_class_install_property (gobject_class, PROP_OUTPUT_HEIGHT,
+      g_param_spec_uint ("output-height", "output height",
+          "video frame output height, which scaled by video decoder. 0 means default source height",
+          0, G_MAXUINT32, 0,
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | GST_PARAM_MUTABLE_READY));
 
   element_class->change_state =
       GST_DEBUG_FUNCPTR (gst_omx_video_dec_change_state);
@@ -2853,6 +2875,44 @@ gst_omx_video_dec_set_format (GstVideoDecoder * decoder,
     if (!klass->set_format (self, self->dec_in_port, state)) {
       GST_ERROR_OBJECT (self, "Subclass failed to set the new format");
       return FALSE;
+    }
+  }
+
+  // TH1520's VPU supporting post-process to scale-down output video frame.
+  if (self->output_width > 0 || self->output_height > 0)   // width or height is set
+  {
+    self->output_width = GST_ROUND_DOWN_4 (self->output_width);
+    self->output_height = GST_ROUND_DOWN_4 (self->output_height);
+
+    if (self->output_width > port_def.format.video.nFrameWidth ||
+        self->output_height > port_def.format.video.nFrameHeight) {
+        GST_WARNING_OBJECT(self, "can't scale-up to %ux%u, keep origin size: %lux%lu",
+                           self->output_width, self->output_height,
+                           port_def.format.video.nFrameWidth, port_def.format.video.nFrameHeight);
+    } else {
+      // if output_width is 0, calculate from output_height by input w/h ratio
+      if (self->output_width == 0 && port_def.format.video.nFrameHeight != 0)
+        self->output_width = GST_ROUND_DOWN_4 ((guint32)(1.0 * self->output_height *
+                                                         port_def.format.video.nFrameWidth /
+                                                         port_def.format.video.nFrameHeight));
+
+      // if output_height is 0, calculate from output_width by input w/h ratio
+      if (self->output_height == 0 && port_def.format.video.nFrameWidth != 0)
+        self->output_height = GST_ROUND_DOWN_4 ((guint32)(1.0 * self->output_width *
+                                                          port_def.format.video.nFrameHeight /
+                                                          port_def.format.video.nFrameWidth));
+
+      if (self->output_width < 144)
+        self->output_width = 144;   // TH1520 min output width  is 144
+      if (self->output_height < 144)
+        self->output_height = 144;  // TH1520 min output height is 144
+      GST_DEBUG_OBJECT(self, "output scale-down to %ux%u", self->output_width, self->output_height);
+
+      gst_omx_port_get_port_definition (self->dec_out_port, &port_def);
+      port_def.format.video.nFrameWidth = self->output_width;
+      port_def.format.video.nFrameHeight = self->output_height;
+      if (gst_omx_port_update_port_definition (self->dec_out_port, &port_def) != OMX_ErrorNone)
+        return FALSE;
     }
   }
 

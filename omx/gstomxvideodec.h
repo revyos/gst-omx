@@ -100,6 +100,9 @@ struct _GstOMXVideoDec
 #ifdef USE_OMX_TARGET_ZYNQ_USCALE_PLUS
   guint32 internal_entropy_buffers;
 #endif
+
+  guint32 output_width;
+  guint32 output_height;
 };
 
 struct _GstOMXVideoDecClass
