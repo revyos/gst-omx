@@ -2916,6 +2916,14 @@ gst_omx_video_dec_set_format (GstVideoDecoder * decoder,
     }
   }
 
+  if (self->dmabuf) {
+    gst_omx_port_get_port_definition (self->dec_out_port, &port_def);
+    port_def.nBufferAlignment = 16;          // TH1520 DPU stride align 16
+
+    if (gst_omx_port_update_port_definition (self->dec_out_port, &port_def) != OMX_ErrorNone)
+      return FALSE;
+  }
+
   GST_DEBUG_OBJECT (self, "Updating ports definition");
   if (gst_omx_port_update_port_definition (self->dec_out_port,
           NULL) != OMX_ErrorNone)
