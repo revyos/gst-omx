@@ -305,10 +305,10 @@ gst_omx_video_dec_open (GstVideoDecoder * decoder)
   self->dec_in_port = gst_omx_component_add_port (self->dec, in_port_index);
   self->dec_out_port = gst_omx_component_add_port (self->dec, out_port_index);
 
-#ifdef USE_OMX_TARGET_ZYNQ_USCALE_PLUS
+//#ifdef USE_OMX_TARGET_ZYNQ_USCALE_PLUS
   GST_DEBUG_OBJECT (self, "Configure decoder output to export dmabuf");
   self->dmabuf = gst_omx_port_set_dmabuf (self->dec_out_port, TRUE);
-#endif
+//#endif
 
   if (!self->dec_in_port || !self->dec_out_port)
     return FALSE;
