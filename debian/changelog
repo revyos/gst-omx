@@ -1,3 +1,52 @@
+gst-omx (1.22.0-1revyos5) unstable; urgency=medium
+
+  [ Xuan Chen ]
+  * (#a60d7d) remove flag OMX_BUFFERFLAG_CODECCONFIG to
+  *  avoid mix codec config with frame data in the same buffer
+
+  [ Han Gao ]
+  * release version
+
+ -- Han Gao <gaohan@iscas.ac.cn>  Tue, 19 Sep 2023 10:09:44 +0800
+
+gst-omx (1.22.0-1revyos4.1) UNRELEASED; urgency=medium
+
+  * (#d1d26d) merge ptg upstream commits
+   - modify gstomx.conf
+   - optimize encode performance use dmabuf
+   - add openmax decoder post-process scale-down feature
+   - add video decode buffer alignment for dmabuf
+
+ -- Xuan Chen <chenxuan@iscas.ac.cn>  Mon, 18 Sep 2023 15:06:06 +0800
+
+gst-omx (1.22.0-1revyos4) unstable; urgency=medium
+
+  [ Xuan Chen ]
+  * fix vp9 accel
+
+ -- Han Gao <gaohan@iscas.ac.cn>  Fri, 21 Jul 2023 17:06:42 +0800
+
+gst-omx (1.22.0-1revyos3) unstable; urgency=medium
+
+  [ Xuan Chen ]
+  * add-h265-vp9.patch
+
+ -- Han Gao <gaohan@iscas.ac.cn>  Thu, 20 Jul 2023 18:17:43 +0800
+
+gst-omx (1.22.0-1revyos2) unstable; urgency=medium
+
+  * add vpu patch
+    - add-libomxil-config.patch
+    - set-dec-out-port-dmabuf.patch 
+
+ -- Han Gao <debian@localhost>  Wed, 19 Jul 2023 03:02:49 +0800
+
+gst-omx (1.22.0-1revyos1) unstable; urgency=medium
+
+  * Add VC8000D config
+
+ -- Han Gao <gaohan@iscas.ac.cn>  Fri, 02 Jun 2023 12:30:05 +0800
+
 gst-omx (1.22.0-1) unstable; urgency=low
 
   * New upstream release.
