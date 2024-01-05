@@ -1051,6 +1051,11 @@ typedef struct OMX_VIDEO_CONFIG_NALSIZE {
 
 /** @} */
 
+/** Enum for standard video codingtype extensions */
+typedef enum OMX_VIDEO_CODINGEXTTYPE {
+    OMX_VIDEO_CodingVP8 = OMX_VIDEO_CodingKhronosExtensions + 1
+} OMX_VIDEO_CODINGEXTTYPE;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
