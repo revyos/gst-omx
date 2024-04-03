@@ -2932,7 +2932,9 @@ gst_omx_video_dec_set_format (GstVideoDecoder * decoder,
           NULL) != OMX_ErrorNone)
     return FALSE;
 
-  gst_buffer_replace (&self->codec_data, state->codec_data);
+  if (self->dec_in_port->port_def.format.video.eCompressionFormat != OMX_VIDEO_CodingWMV)
+    gst_buffer_replace (&self->codec_data, state->codec_data);
+
   self->input_state = gst_video_codec_state_ref (state);
 
 #ifdef USE_OMX_TARGET_ZYNQ_USCALE_PLUS
