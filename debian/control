@@ -10,7 +10,8 @@ Build-Depends: debhelper-compat (= 13),
                libgstreamer1.0-dev (>= 1.18),
                meson (>= 0.47),
                rename,
-               xsltproc
+               xsltproc,
+               th1520-vpu
 Standards-Version: 4.5.0
 Section: libs
 Homepage: https://gstreamer.freedesktop.org/modules/gst-omx.html
