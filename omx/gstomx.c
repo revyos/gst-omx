@@ -730,6 +730,12 @@ EventHandler (OMX_HANDLETYPE hComponent, OMX_PTR pAppData, OMX_EVENTTYPE eEvent,
     }
     case OMX_EventPortSettingsChanged:
     {
+      if (nData2 != 0) {
+        // do not handle event=OMX_EventPortSettingsChanged and nData2=0,
+        // Refer to dynamic vp9 resolution changing design document.
+        break;
+      }
+
       GstOMXMessage *msg = g_slice_new (GstOMXMessage);
       OMX_U32 index;
 
